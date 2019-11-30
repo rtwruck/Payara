@@ -41,6 +41,8 @@
 
 package org.glassfish.javaee.full.deployment;
 
+import com.sun.enterprise.deployment.Application;
+import com.sun.enterprise.deployment.util.DOLUtils;
 import com.sun.enterprise.loader.ASURLClassLoader;
 import java.io.IOException;
 import java.net.URL;
@@ -55,8 +57,11 @@ import java.util.List;
  */
 public class EarLibClassLoader extends ASURLClassLoader
 {
-    public EarLibClassLoader(URL[] urls, ClassLoader classLoader) {
+    private final Application application;
+
+    public EarLibClassLoader(URL[] urls, ClassLoader classLoader, Application application) {
         super(classLoader); 
+        this.application = application;
         enableCurrentBeforeParent();
         for (URL url : urls) {
             super.addURL(url);
@@ -99,5 +104,15 @@ public class EarLibClassLoader extends ASURLClassLoader
     @Override
     protected String getClassLoaderName() {
         return "EarLibClassLoader";
+    }
+
+    @Override
+    protected boolean isWhitelistEnabled() {
+        return application.isWhitelistEnabled();
+    }
+
+    @Override
+    protected boolean isWhiteListed(String className) {
+        return DOLUtils.isWhiteListed(application, className);
     }
 }

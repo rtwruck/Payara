@@ -342,7 +342,7 @@ public class EarHandler extends AbstractArchiveHandler implements CompositeHandl
             final EarLibClassLoader earLibCl = AccessController.doPrivileged(new PrivilegedAction<EarLibClassLoader>() {
                 @Override
                 public EarLibClassLoader run() {
-                    return new EarLibClassLoader(earLibURLs, parent);
+                    return new EarLibClassLoader(earLibURLs, parent, holder.app);
                 }
             });
 
@@ -378,7 +378,7 @@ public class EarHandler extends AbstractArchiveHandler implements CompositeHandl
             cl = AccessController.doPrivileged(new PrivilegedAction<EarClassLoader>() {
                 @Override
                 public EarClassLoader run() {
-                    return new EarClassLoader(embeddedConnCl, holder.app);
+                    return new EarClassLoader(embeddedConnCl);
                 }
             });
 
